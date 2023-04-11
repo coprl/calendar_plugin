@@ -1,0 +1,29 @@
+<div id="<%= comp.id %>"
+     class="v-plugin v-input v-calendar"
+     data-plugin-callback="Calendar"
+     data-schedule="<%= raw h expand_hash(comp.schedule).to_json %>">
+  <!-- Parent container for the calendar month -->
+  <div class="v-calendar-month">
+    <!-- The calendar header -->
+    <section class="v-calendar-month-header">
+      <!-- Month name -->
+      <div id="selected-month" class="v-calendar-month-header-selected-month">
+      </div>
+
+      <!-- Pagination -->
+      <div class="v-calendar-month-header-selectors">
+        <span id="previous-month-selector"><</span>
+        <span id="present-month-selector">Today</span>
+        <span id="next-month-selector">></span>
+      </div>
+    </section>
+
+    <!-- Calendar grid header -->
+    <ol id="days-of-week" class="v-day-of-week">
+    </ol>
+
+    <!-- Calendar grid -->
+    <ol id="calendar-days" class="v-days-grid">
+    </ol>
+  </div>
+</div>
