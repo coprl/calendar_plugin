@@ -1,7 +1,9 @@
 <div id="<%= comp.id %>"
      class="v-plugin v-input v-calendar"
      data-plugin-callback="Calendar"
-     data-schedule="<%= raw h expand_hash(comp.schedule).to_json %>">
+     data-input-tag="<%= comp.input_tag %>"
+     data-schedule="<%= raw h expand_hash(comp.schedule).to_json %>"
+     <%= partial "components/event", locals: {comp: comp, events: comp.events, parent_id: comp.event_parent_id} if comp.events&.any? %>>
   <!-- Parent container for the calendar month -->
   <div class="v-calendar-month">
     <!-- The calendar header -->

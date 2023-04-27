@@ -8,8 +8,8 @@ module Coprl
 
           attr_reader :schedule
           def initialize(**attribs, &block)
-            super(type: :calendar, **attribs, &block)
             @schedule = attribs.delete(:schedule){ {} }
+            super(type: :calendar, **attribs, &block)
             expand!
           end
 

@@ -114,8 +114,7 @@ class Calendar {
           dayElement.append(this.createEventElement(event['label'], event));
         });
       } else {
-        let event = this.schedule[day.date];
-        dayElement.append(this.createEventElement(event['label'], event));
+        dayElement.addEventListener('click', this.clickCallback(this.schedule[day.date]))
       }
     }
 
@@ -127,10 +126,23 @@ class Calendar {
     return this.schedule.hasOwnProperty(day.date)
   }
 
+  clickCallback(params) {
+    return () => {
+      this.dispatchEvent('date_selected', params);
+    }
+  }
+
+  dispatchEvent(name, data = undefined) {
+    console.debug(`Calendar: dispatch event: ${name}`);
+    console.dir(data);
+    const event = new CustomEvent(name, {composed: true, detail: data});
+    this.element.dispatchEvent(event);
+  }
+
   createEventElement(label, params) {
     let eventElement = document.createElement("div");
     eventElement.innerText = label;
-    // TODO Add click event
+    eventElement.addEventListener('click', this.clickEvent.bind(this));
     return eventElement;
   }
 
