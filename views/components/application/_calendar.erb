@@ -3,6 +3,8 @@
      data-plugin-callback="Calendar"
      data-input-tag="<%= comp.input_tag %>"
      data-schedule="<%= raw h expand_hash(comp.schedule).to_json %>"
+     data-selected-month="<%= comp.selected_month %>"
+     data-mode="<%= comp.mode %>"
      <%= partial "components/event", locals: {comp: comp, events: comp.events, parent_id: comp.event_parent_id} if comp.events&.any? %>>
   <!-- Parent container for the calendar month -->
   <div class="v-calendar-month">

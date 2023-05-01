@@ -6,17 +6,24 @@ class Calendar {
     dayjs.extend(window.dayjs_plugin_weekOfYear);
 
     this.element = element;
+    this.mode = element.dataset.mode;
     let raw_schedule = JSON.parse(element.dataset.schedule);
     // Format the dates that act as keys for the schedule
     this.schedule = Object.fromEntries(
       Object.entries(raw_schedule).map(([k,v]) => [dayjs(k).format("YYYY-MM-DD"), v])
     );
     this.WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    this.INITIAL_YEAR = dayjs().format("YYYY");
-    this.INITIAL_MONTH = dayjs().format("M");
     this.TODAY = dayjs().format("YYYY-MM-DD");
 
-    this.selectedMonth = dayjs(new Date(this.INITIAL_YEAR, this.INITIAL_MONTH - 1, 1));
+    if (element.dataset.selectedMonth) {
+      this.selectedMonth = dayjs(dayjs(element.dataset.selectedMonth).format("YYYY-MM-01"));
+    } else {
+      this.selectedMonth = dayjs(new Date(dayjs().format("YYYY"), dayjs().format("M") - 1, 1));
+    }
+    this.INITIAL_YEAR = dayjs(this.selectedMonth).format("YYYY");
+    this.INITIAL_MONTH = dayjs(this.selectedMonth).format("M");
+    console.log(this.selectedMonth);
+
     this.currentMonthDays = [];
     this.previousMonthDays = [];
     this.nextMonthDays = [];
@@ -57,11 +64,8 @@ class Calendar {
 
   createDaysForPreviousMonth(year, month) {
     const firstDayOfTheMonthWeekday = this.getWeekday(this.currentMonthDays[0].date);
-
     const previousMonth = dayjs(`${year}-${month}-01`).subtract(1, "month");
-
     const visibleNumberOfDaysFromPreviousMonth = firstDayOfTheMonthWeekday ? firstDayOfTheMonthWeekday : 6
-
     const previousMonthLastMondayDayOfMonth = dayjs(
       this.currentMonthDays[0].date
     ).subtract(visibleNumberOfDaysFromPreviousMonth, "day").date();
@@ -79,9 +83,7 @@ class Calendar {
 
   createDaysForNextMonth(year, month) {
     const lastDayOfTheMonthWeekday = this.getWeekday(`${year}-${month}-${this.currentMonthDays.length}`)
-
     const visibleNumberOfDaysFromNextMonth = lastDayOfTheMonthWeekday ? 6 - lastDayOfTheMonthWeekday : lastDayOfTheMonthWeekday
-
     return [...Array(visibleNumberOfDaysFromNextMonth)].map((day, index) => {
       return {
         date: dayjs(`${year}-${Number(month) + 1}-${index + 1}`).format("YYYY-MM-DD"),
@@ -109,7 +111,7 @@ class Calendar {
 
     if (this.dayHasEvent(day)) {
       dayElementClassList.add("v-calendar-day--has-event");
-      if (Array.isArray(this.schedule[day.date])) {
+      if (this.mode == 'list') {
         this.schedule[day.date].forEach((event) => {
           dayElement.append(this.createEventElement(event['label'], event));
         });

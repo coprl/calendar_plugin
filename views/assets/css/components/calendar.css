@@ -80,9 +80,9 @@ ol, li {
     align-items: center;
     position: absolute;
     border-radius: 50%;
-    right: 25%;
-    top: 25%;
-    padding: 15%;
+    right: 20%;
+    top: 5%;
+    padding: 25%;
     width: 10%;
     height: 10%;
 }
