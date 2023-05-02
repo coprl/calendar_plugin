@@ -117,6 +117,19 @@ class Calendar {
         });
       } else {
         dayElement.addEventListener('click', this.clickCallback(this.schedule[day.date]))
+        if (this.schedule[day.date]['disabled']) {
+          dayElementClassList.add("v-calendar-day--disabled");
+        }
+        if (this.schedule[day.date]['label']) {
+          if (this.schedule[day.date]['disabled']) {
+            const disabledElement = document.createElement("div");
+            disabledElement.innerText = this.schedule[day.date]['label'];
+            dayElement.appendChild(disabledElement);
+          } else {
+            const toolTip = this.createTooltipElement(this.schedule[day.date]['label'], dayOfMonthElement);
+            dayElement.append(toolTip);
+          }
+        }
       }
     }
 
@@ -140,6 +153,28 @@ class Calendar {
     const event = new CustomEvent(name, {composed: true, detail: data});
     this.element.dispatchEvent(event);
   }
+
+  createTooltipElement(text, dayElement) {
+    let toolTipElement = document.createElement("div");
+    toolTipElement.innerText = text;
+    toolTipElement.classList.add("v-tooltip");
+    toolTipElement.classList.add("mdl-tooltip");
+    toolTipElement.classList.add("mdl-tooltip--right");
+    dayElement.addEventListener('mouseenter', function() {
+      toolTipElement.style.top = '0px';
+      toolTipElement.style.left = '0px';
+      toolTipElement.style.position = 'absolute';
+      toolTipElement.classList.add("is-active");
+    });
+    dayElement.addEventListener('mouseout', function() {
+      toolTipElement.style.top = '-500px';
+      toolTipElement.style.left = '-500px';
+      toolTipElement.style.position = 'relative';
+      toolTipElement.classList.remove("is-active");
+    });
+    return toolTipElement;
+  }
+
 
   createEventElement(label, params) {
     let eventElement = document.createElement("div");

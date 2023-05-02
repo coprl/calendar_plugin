@@ -6,11 +6,13 @@ module Coprl
       module Calendar
         class Component < DSL::Components::EventBase
 
-          attr_reader :mode, :schedule, :selected_month
+          attr_reader :mode, :schedule, :selected_month, :primary_color, :secondary_color
           def initialize(**attribs, &block)
             @mode = validate_mode(attribs.delete(:mode){ :single })
             @schedule = attribs.delete(:schedule){ {} }
             @selected_month = attribs.delete(:selected_month){ nil }
+            @primary_color = attribs.delete(:primary_color){ '#3e4e63' }
+            @secondary_color = attribs.delete(:secondary_color){ '#e4e9f0' }
             super(type: :calendar, **attribs, &block)
             expand!
           end
