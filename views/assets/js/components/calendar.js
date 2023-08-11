@@ -22,7 +22,9 @@ class Calendar {
     }
     this.INITIAL_YEAR = dayjs(this.selectedMonth).format("YYYY");
     this.INITIAL_MONTH = dayjs(this.selectedMonth).format("M");
-    console.log(this.selectedMonth);
+
+    this.CURRENT_YEAR = dayjs().format("YYYY");
+    this.CURRENT_MONTH = dayjs().format("M");
 
     this.currentMonthDays = [];
     this.previousMonthDays = [];
@@ -65,7 +67,7 @@ class Calendar {
   createDaysForPreviousMonth(year, month) {
     const firstDayOfTheMonthWeekday = this.getWeekday(this.currentMonthDays[0].date);
     const previousMonth = dayjs(`${year}-${month}-01`).subtract(1, "month");
-    const visibleNumberOfDaysFromPreviousMonth = firstDayOfTheMonthWeekday ? firstDayOfTheMonthWeekday : 6
+    const visibleNumberOfDaysFromPreviousMonth = firstDayOfTheMonthWeekday;
     const previousMonthLastMondayDayOfMonth = dayjs(
       this.currentMonthDays[0].date
     ).subtract(visibleNumberOfDaysFromPreviousMonth, "day").date();
@@ -201,7 +203,6 @@ class Calendar {
     this.nextMonthDays = this.createDaysForNextMonth(year, month);
 
     let days = [...this.previousMonthDays, ...this.currentMonthDays, ...this.nextMonthDays];
-
     days.forEach((day) => {
       this.appendDay(day, calendarDaysElement);
     });
@@ -222,7 +223,7 @@ class Calendar {
       });
 
     this.element.querySelector("#present-month-selector").addEventListener("click", () => {
-        this.selectedMonth = dayjs(new Date(this.INITIAL_YEAR, this.INITIAL_MONTH - 1, 1));
+        this.selectedMonth = dayjs(new Date(this.CURRENT_YEAR, this.CURRENT_MONTH - 1, 1));
         this.createCalendar(this.selectedMonth.format("YYYY"), this.selectedMonth.format("M"));
       });
 
